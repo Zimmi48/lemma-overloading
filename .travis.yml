@@ -1,7 +1,9 @@
 language: nix
 
 script:
-- nix-build --arg coq-version "\"$COQ_VERSION\"" --extra-substituters https://coq.cachix.org --trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= coq.cachix.org-1:Jgt0DwGAUo+wpxCM52k2V+E0hLoOzFPzvg94F65agtI="
+  # Install Cachix as documented at https://github.com/cachix/cachix
+  - nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
+  - nix-build --arg coq-version "\"$COQ_VERSION\"" --extra-substituters https://coq.cachix.org --trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= coq.cachix.org-1:Jgt0DwGAUo+wpxCM52k2V+E0hLoOzFPzvg94F65agtI=" | if [ ! -z "$CACHIX_SIGNING_KEY" ]; then cachix push coq; fi
 
 env:
   - COQ_VERSION=master
